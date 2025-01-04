@@ -1,0 +1,134 @@
+<!-- filepath: /C:/Users/pc/Desktop/code/zoo-website-main/HTML/buyaticket.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy a Ticket - Zoofari</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/CSS/home.css">
+    <link rel="stylesheet" href="/CSS/ticket.css">
+    <link rel="shortcut icon" href="/icon-10.png" type="image/x-icon">
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+
+        .output {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class="text-center mb-4">Buy a Ticket</h2>
+    <div class="form-container">
+        <label for="numPersons">Number of Persons:</label>
+        <input type="number" id="numPersons" placeholder="Enter total number of persons" min="2" max="25">
+
+        <label for="category">Select Category (Child 100rp / Adult 200rp):</label>
+        <select id="category">
+            <option value="" selected disabled>Choose an option</option>
+            <option value="adult">Adult</option>
+            <option value="child">Child</option>
+        </select>
+
+        <label for="numChildren">Number of Children:</label>
+        <input type="number" id="numChildren" placeholder="Enter number of children">
+
+        <label for="numAdults">Number of Adults:</label>
+        <input type="number" id="numAdults" placeholder="Enter number of adults">
+
+        <button id="confirmButton" class="confirm-button btn btn-success">Confirm</button>
+        <div id="output" class="output"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Dropdown change event
+            $("#category").change(function () {
+                const category = $(this).val();
+                if (category === "adult") {
+                    $("#numAdults").prop("disabled", false);
+                    $("#numChildren").prop("disabled", true);
+                } else if (category === "child") {
+                    $("#numChildren").prop("disabled", false);
+                    $("#numAdults").prop("disabled", true);
+                }
+            });
+
+            // Confirm button functionality
+            $("#confirmButton").click(function () {
+                const numPersons = parseInt($("#numPersons").val()) || 0;
+                const numAdults = parseInt($("#numAdults").val()) || 0;
+                const numChildren = parseInt($("#numChildren").val()) || 0;
+
+                // Calculate total price
+                const adultPrice = 200;
+                const childPrice = 100;
+
+                const totalAdultAmount = numAdults * adultPrice;
+                const totalChildAmount = numChildren * childPrice;
+                const totalAmount = totalAdultAmount + totalChildAmount;
+
+                // Validate entries
+                if (!numPersons || (!numAdults && !numChildren)) {
+                    $("#output").text("Please fill all required fields correctly.");
+                    return;
+                }
+
+                // Display output
+                $("#output").html(
+                    `Details:<br>` +
+                    `Total Persons: ${numPersons}<br>` +
+                    `Number of Adults: ${numAdults}<br>` +
+                    `Number of Children: ${numChildren}<br>` +
+                    `Total Adult Amount: ${totalAdultAmount}<br>` +
+                    `Total Child Amount: ${totalChildAmount}<br>` +
+                    `Grand Total: ${totalAmount}`
+                );
+
+                // Save data in an object (optional)
+                const data = {
+                    numPersons,
+                    numAdults,
+                    numChildren,
+                    totalAdultAmount,
+                    totalChildAmount,
+                    totalAmount,
+                };
+
+                console.log("Saved Data:", data);
+            });
+        });
+    </script>
+</body>
+
+</html>
